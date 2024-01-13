@@ -1,4 +1,4 @@
-package hash
+package pkghash
 
 import (
 	"crypto/sha256"

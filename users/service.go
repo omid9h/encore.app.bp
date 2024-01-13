@@ -9,7 +9,7 @@ var _ = sqldb.NewDatabase("users", sqldb.DatabaseConfig{
 	Migrations: "./migrations",
 })
 
-var usersdb = sqldb.Named("users").Stdlib()
+var usersdb = sqldb.Named("users").Stdlib() //lint:ignore U1000 encore spec
 
 //encore:service
 type Service struct {
@@ -27,6 +27,8 @@ func NewService(repo *repo.Queries) *Service {
 
 // initService initializes the user service.
 // It is automatically called by Encore on service startup.
+//
+//lint:ignore U1000 encore spec
 func initService() (*Service, error) {
 	return NewService(repo.New(usersdb)), nil
 }

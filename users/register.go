@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/omid9h/encore.app.bp/pkg/hash"
+	"github.com/omid9h/encore.app.bp/pkg/pkghash"
 
 	"github.com/google/uuid"
 	"github.com/invopop/validation"
@@ -38,8 +38,7 @@ type RegisterOutput struct {
 //
 //encore:api public method=POST path=/user/register
 func (s *Service) Register(ctx context.Context, input RegisterInput) (output RegisterOutput, err error) {
-	input.Password = hash.HashPassword(input.Password)
-	println(s.repo)
+	input.Password = pkghash.HashPassword(input.Password)
 	u, err := s.repo.InsertUser(ctx, repo.InsertUserParams{
 		Email:    input.Email,
 		Password: input.Password,

@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/omid9h/encore.app.bp/pkg/hash"
-	"github.com/omid9h/encore.app.bp/pkg/token"
+	"github.com/omid9h/encore.app.bp/pkg/pkghash"
+	"github.com/omid9h/encore.app.bp/pkg/pkgtoken"
+	"github.com/omid9h/encore.app.bp/users/repo"
 
 	"github.com/invopop/validation"
 	"github.com/invopop/validation/is"
@@ -43,13 +44,18 @@ func (s *Service) Login(ctx context.Context, input LoginInput) (output LoginOutp
 	if err != nil {
 		return
 	}
-	if u.Email == "" || !hash.ComparePasswords(u.Password, input.Password) {
+	if u.Email == "" || !pkghash.ComparePasswords(u.Password, input.Password) {
 		err = ErrUserNotFound
 		return
 	}
 	output.ID = u.ID.String()
 	output.Email = u.Email
-	output.Token = token.CreateJWTToken(secrets.JWTSecret, s.Issuer, u.ID.String(), u.Email, u.Roles.String)
+	output.Token = pkgtoken.CreateJWTToken(secrets.JWTSecret, s.Issuer, u.ID.String(), u.Email, u.Roles.String)
+	// save token in repo
+	err = s.repo.InsertToken(ctx, repo.InsertTokenParams{
+		UserID: u.ID,
+		Token:  output.Token,
+	})
 	return
 }
 
