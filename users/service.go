@@ -5,7 +5,7 @@ import (
 	"github.com/omid9h/encore.app.bp/users/repo"
 )
 
-var _ = sqldb.NewDatabase("user", sqldb.DatabaseConfig{
+var _ = sqldb.NewDatabase("users", sqldb.DatabaseConfig{
 	Migrations: "./migrations",
 })
 
