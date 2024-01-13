@@ -9,7 +9,7 @@ var _ = sqldb.NewDatabase("user", sqldb.DatabaseConfig{
 	Migrations: "./migrations",
 })
 
-var userdb = sqldb.Named("user").Stdlib()
+var usersdb = sqldb.Named("users").Stdlib()
 
 //encore:service
 type Service struct {
@@ -21,12 +21,12 @@ type Service struct {
 func NewService(repo *repo.Queries) *Service {
 	return &Service{
 		repo:   repo,
-		Issuer: "github.com/omid9h/encore.app.bp.bp",
+		Issuer: "encore.app.bp",
 	}
 }
 
 // initService initializes the user service.
 // It is automatically called by Encore on service startup.
 func initService() (*Service, error) {
-	return NewService(repo.New(userdb)), nil
+	return NewService(repo.New(usersdb)), nil
 }
